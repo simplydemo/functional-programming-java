@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -26,6 +27,19 @@ public class PredicateInteger {
     }
 
     final Predicate<Integer> GE2 = v -> v > 2;
+
+    @Test
+    public void ut1001_predicateGE2() {
+        log.info("result : {}", GE2.test(2));
+        log.info("result : {}", GE2.test(3));
+    }
+
+    @Test
+    public void ut1002_predicateListGE2() {
+        final List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        log.info("result : {}", list.stream().filter(GE2).collect(Collectors.toList()));
+    }
+
     final Predicate<Integer> LE7 = n -> n < 7;
 
     @Test

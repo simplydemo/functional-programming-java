@@ -14,20 +14,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PredicateCollection {
 
-    private <T> Boolean matcher(List<T> list, Predicate<T> predicate) {
-        for (T v : list) {
-            if (predicate.test(v)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static final String word = "da";
+    private static final String constantValue = "c";
     /**
-     * Predicate 로 evaluate 할 요소가 정의된 값 word 와 일치 하는지 체크
+     * Predicate 로 evaluate 할 요소가 정의된 상수 값 constantValue 와 일치 하는지 체크
      */
-    final Predicate<String> findWord = p -> p.equals(word);
+    final Predicate<String> predicateConstantValue = p -> p.equals(constantValue);
+
+    @Test
+    public void ut1001_predicateConstantValue() {
+        final List<String> list = Arrays.asList("a", "b", "c", "d", "e");
+        log.info("result: {}", matcher(list, predicateConstantValue));
+    }
 
     /**
      * Predicate 로 evaluate 할 요소가, 비교 할 값 value 일치 하는지 체크, 특히 value 는 Type 을 정의 하지 않았으므로
@@ -37,15 +34,52 @@ public class PredicateCollection {
         return p -> value.equals(p);
     }
 
-    @Test
-    public void testPredicateCollection() {
-        final List<String> list = Arrays.asList("a", "b", "c", "d", "e");
-        log.info("findWord 1: {}", matcher(list, findWord));
-        log.info("findWord 2: {}", matcher(list, matcher("da")));
-        log.info("findWord 3: {}", list.stream().anyMatch(findWord));
-
-        final List<Integer> listInt = Arrays.asList(1, 2, 3, 4, 5);
-        log.info("findWord 4: {}", matcher(listInt, matcher(10)));
+    private <T> Boolean matcher(List<T> list, Predicate<T> predicate) {
+        for (T v : list) {
+            if (predicate.test(v)) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    @Test
+    public void ut1002_predicateStringWithMatcher() {
+        final List<String> list = Arrays.asList("a", "b", "c", "d", "e");
+        log.info("result: {}", matcher(list, matcher("c")));
+    }
+
+    @Test
+    public void ut1003_predicateIntegerWithMatcher() {
+        final List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        log.info("result: {}", matcher(list, matcher(0)));
+    }
+
+    <T> Predicate<T> listMatcher(List<T> t) {
+        return p -> {
+            for (T v : t) {
+                if (v.equals(p)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    @Test
+    public void ut1004_listOfStringPredicateWithMatcher() {
+        final List<String> strings = Arrays.asList("a", "b", "c", "d", "e");
+        log.info("result: {}", listMatcher(strings).test("f"));
+    }
+
+    @Test
+    public void ut1005_listOfIntegerPredicateWithMatcher() {
+        final List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5);
+        log.info("result: {}", listMatcher(integers).test(11));
+    }
+
+    // public static <A,B> Function<A,B> Y(Function<Function<A,B>, Function<A,B>> f) {
+    // return x -> f.apply(Y(f)).apply(x);
+    // }
 
 }

@@ -1,6 +1,7 @@
 package re.study.functionalprogramming.func;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
@@ -17,10 +18,38 @@ public class FunctionAdd {
      */
     Function<Integer, Integer> addOne = i -> i + 1;
 
+    Function<Integer, Integer> addOne() {
+        return new Function<Integer, Integer>() {
+            public Integer apply(Integer i) {
+                return i + 1;
+            }
+        };
+    }
+
     @Test
-    public void testAddOne() {
+    public void ut1001_AddOne() {
         log.info("result: {}", addOne.apply(100));
     }
+
+    @Test
+    public void ut1002_AddOne() {
+        log.info("result: {}", addOne().apply(100));
+    }
+
+    @Test
+    public void ut1001_AddOneAndOne() {
+        log.info("result: {}", addOne.compose(addOne).apply(100));
+    }
+
+    @Test
+    public void ut1002_AddOneAndOne() {
+        log.info("result: {}", addOne().compose(addOne()).apply(100));
+    }
+
+    /**
+     * 넘겨받는 인자가 Integer 타입 2개 이고, 결과는 Integer 타입으로 리턴
+     */
+    BiFunction<Integer, Integer, Integer> addInt = (x, y) -> x + y;
 
     /**
      * 넘겨받은 Integer 를 더한 값을 리턴
@@ -32,16 +61,28 @@ public class FunctionAdd {
     }
 
     @Test
-    public void testAddInt() {
-        log.info("result: {}", addInt(11).apply(100));
+    public void ut1001_AddXY() {
+        log.info("result: {}", addInt.apply(10, 10));
     }
 
-    /**
-     * 함수 컴포지션 'andThen' 을 통한 합산
-     */
     @Test
-    public void testAddIntAndThen() {
-        log.info("result: {}", addInt(10).andThen(addOne).andThen(addOne).andThen(addOne).apply(100));
+    public void ut1002_AddXY() {
+        log.info("result: {}", addInt(10).apply(10));
+    }
+
+    static Integer add5(Integer i) {
+        return i + 5;
+    }
+
+    @Test
+    public void ut1001_AddXYAndAddOne() {
+        log.info("result: {}", addInt.andThen(v -> v + 5).apply(10, 10));
+        log.info("result: {}", addInt.andThen(FunctionAdd::add5).apply(10, 10));
+    }
+
+    @Test
+    public void ut1004_AddInt() {
+        log.info("result: {}", addInt(10).andThen(addInt(5)).apply(10));
     }
 
     /**
