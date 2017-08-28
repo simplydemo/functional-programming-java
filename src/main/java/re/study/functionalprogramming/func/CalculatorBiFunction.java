@@ -19,7 +19,7 @@ public class CalculatorBiFunction {
     BinaryOperator<Long> division = (x, y) -> x / y;
 
     /**
-     * 정의된 함수를 사용
+     * BinaryOperator 인터페이스는 BiFunction 인터페이스를 상속한 2개의 인자를 받아 연산 하는 함수
      * @throws Exception
      */
     @Test
@@ -31,7 +31,7 @@ public class CalculatorBiFunction {
     }
 
     /**
-     * 함수형 프로그래밍은 HOF 를 지원 하므로 넘겨받은 함수를 적용
+     * HOF(고차 함수)를 통한 처리 예제로, 넘겨 받는 함수를 통해 데이터를 처리 하는 예제
      * @param v1 값1
      * @param v2 값2
      * @param func 함수

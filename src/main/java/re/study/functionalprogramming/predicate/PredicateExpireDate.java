@@ -23,12 +23,31 @@ public class PredicateExpireDate {
     final Predicate<Date> isExpired = d -> d.getTime() < System.currentTimeMillis();
 
     /**
+     * 현재 일시를 기준으로 만료 되었는지 여부를 판단 하는 Predicate
+     */
+    @Test
+    public void ut1001_isExpired() {
+        final Date tokenDt = DateUtils.toDate(DateUtils.nowTime().minusMinutes(-1));
+        log.info("isExpired : {}", isExpired.test(tokenDt));
+    }
+
+    /**
      * 특정일을 'chkDate' 기준으로 만료 되었는지를 판단 하는 Predicate
      * @param chkDate
      * @return
      */
-    public Predicate<Date> isExpired(final Date chkDate) {
+    private Predicate<Date> isExpired(final Date chkDate) {
         return d -> d.getTime() < (chkDate == null ? System.currentTimeMillis() : chkDate.getTime());
+    }
+
+    /**
+     * 특정일을 'chkDate' 기준으로 만료 되었는지를 판단 하는 Predicate
+     */
+    @Test
+    public void ut1002_isExpired() {
+        final Date tokenDt = DateUtils.toDate(DateUtils.nowTime().minusMinutes(-1));
+        final Date chkDate = DateUtils.now();
+        log.info("isExpired: {}", isExpired(chkDate).test(tokenDt));
     }
 
     /**
@@ -50,17 +69,18 @@ public class PredicateExpireDate {
     ExpiredChecker<Date, Date> expiredDate = (d, chkDate) -> d.getTime() < chkDate.getTime();
     ExpiredChecker<LocalDateTime, LocalDateTime> expiredLocalDtm = (d, chk) -> d.isBefore(chk);
 
+    /**
+     * expiredDate, expiredLocalDtm 커스텀 함수를 통한 특정일 'chk...' 기준으로 만료 되었는지를 판단 하는 Predicate
+     */
     @Test
-    public void testPredicateExpired() {
-        final Date licensedDate = DateUtils.toDate(DateUtils.nowTime().minusMinutes(-1));
-        final Date now = DateUtils.now();
-        log.info("isExpired 1: {}", isExpired.test(licensedDate));
-        log.info("isExpired 2: {}", isExpired(now).test(licensedDate));
-        log.info("isExpired 3: {}", expiredDate.apply(licensedDate, now));
+    public void ut1003_isExpired() {
+        final Date tokenDt = DateUtils.toDate(DateUtils.nowTime().minusMinutes(-1));
+        final Date chkDate = DateUtils.now();
+        log.info("isExpired: {}", expiredDate.apply(tokenDt, chkDate));
 
-        final LocalDateTime licensedDtm = DateUtils.nowTime().minusMinutes(-1);
-        final LocalDateTime nowTime = DateUtils.nowTime();
-        log.info("isExpired 4: {}", expiredLocalDtm.apply(licensedDtm, nowTime));
+        final LocalDateTime tokenDtm = DateUtils.nowTime().minusMinutes(-1);
+        final LocalDateTime chkDtm = DateUtils.nowTime();
+        log.info("isExpired : {}", expiredLocalDtm.apply(tokenDtm, chkDtm));
     }
 
 }

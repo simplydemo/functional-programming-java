@@ -81,7 +81,9 @@ evenFunc(arr);
   re.study.functionalprogramming.func.CalculatorBiFunction
 
 2. Predicate 에 대한 간단한 이해
-
+  re.study.functionalprogramming.predicate.PredicateInteger
+  re.study.functionalprogramming.predicate.PredicateCollection
+  re.study.functionalprogramming.predicate.PredicateExpireDate
 
 
 

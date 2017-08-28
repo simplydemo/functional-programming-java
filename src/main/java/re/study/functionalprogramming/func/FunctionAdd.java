@@ -13,11 +13,31 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class FunctionAdd {
+
     /**
-     * 1 을 더한 값을 리턴
+     * 람다 표기법을 통한 addOne 함수의 정의
      */
     Function<Integer, Integer> addOne = i -> i + 1;
 
+    /**
+     * 람다 함수의 사용 예
+     */
+    @Test
+    public void ut1001_AddOne() {
+        log.info("result: {}", addOne.apply(100));
+    }
+
+    /**
+     * 람다 함수의 합성을 통한 처리 예제
+     */
+    @Test
+    public void ut1001_AddOneAndOne() {
+        log.info("result: {}", addOne.compose(addOne).apply(100));
+    }
+
+    /**
+     * Function 인터페이스 구현을 통한 addOne 함수의 정의
+     */
     Function<Integer, Integer> addOne() {
         return new Function<Integer, Integer>() {
             public Integer apply(Integer i) {
@@ -26,21 +46,17 @@ public class FunctionAdd {
         };
     }
 
-    @Test
-    public void ut1001_AddOne() {
-        log.info("result: {}", addOne.apply(100));
-    }
-
+    /**
+     * Function 함수의 사용 예
+     */
     @Test
     public void ut1002_AddOne() {
         log.info("result: {}", addOne().apply(100));
     }
 
-    @Test
-    public void ut1001_AddOneAndOne() {
-        log.info("result: {}", addOne.compose(addOne).apply(100));
-    }
-
+    /**
+     * Function 함수의 합성을 통한 처리 예제
+     */
     @Test
     public void ut1002_AddOneAndOne() {
         log.info("result: {}", addOne().compose(addOne()).apply(100));
@@ -52,6 +68,14 @@ public class FunctionAdd {
     BiFunction<Integer, Integer, Integer> addInt = (x, y) -> x + y;
 
     /**
+     * 두개의 인자를 받는 람다 함수 x = f(i1, i2)
+     */
+    @Test
+    public void ut1003_AddXY() {
+        log.info("result: {}", addInt.apply(10, 10));
+    }
+
+    /**
      * 넘겨받은 Integer 를 더한 값을 리턴
      * @param value
      * @return
@@ -60,13 +84,11 @@ public class FunctionAdd {
         return i -> i + value;
     }
 
+    /**
+     * 두개의 인자를 받는  Function 함수 x = f(i1).apply(i2)
+     */
     @Test
-    public void ut1001_AddXY() {
-        log.info("result: {}", addInt.apply(10, 10));
-    }
-
-    @Test
-    public void ut1002_AddXY() {
+    public void ut1004_AddXY() {
         log.info("result: {}", addInt(10).apply(10));
     }
 
@@ -74,14 +96,17 @@ public class FunctionAdd {
         return i + 5;
     }
 
+    /**
+     * java 8 람다 및 메서드레퍼런스를 통한 함수 합성 예제
+     */
     @Test
-    public void ut1001_AddXYAndAddOne() {
+    public void ut1005_AddXYAndAddOne() {
         log.info("result: {}", addInt.andThen(v -> v + 5).apply(10, 10));
         log.info("result: {}", addInt.andThen(FunctionAdd::add5).apply(10, 10));
     }
 
     @Test
-    public void ut1004_AddInt() {
+    public void ut1006_AddInt() {
         log.info("result: {}", addInt(10).andThen(addInt(5)).apply(10));
     }
 
