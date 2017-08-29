@@ -85,7 +85,13 @@ evenFunc(arr);
   re.study.functionalprogramming.predicate.PredicateCollection
   re.study.functionalprogramming.predicate.PredicateExpireDate
 
+3. Supplier 에 대한 간단한 이해
+  re.study.functionalprogramming.supplier.SupplierTest
+  re.study.functionalprogramming.supplier.SupplierLongTimeTest
+  re.study.functionalprogramming.supplier.SupplierFactoryTest
 
+4. Monad 사용 예제를 통한 이해
+  re.study.functionalprogramming.jmonads.CompletableFutureTest
 
 https://github.com/jooyunghan
 https://github.com/jasongoodwin/better-java-monads
