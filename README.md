@@ -90,8 +90,12 @@ evenFunc(arr);
   re.study.functionalprogramming.supplier.SupplierLongTimeTest
   re.study.functionalprogramming.supplier.SupplierFactoryTest
 
-4. Monad 사용 예제를 통한 이해
+4. CompletableFuture 의 이해
   re.study.functionalprogramming.jmonads.CompletableFutureTest
+  re.study.functionalprogramming.jmonads.TaskAllCompletableFuture
+  re.study.functionalprogramming.jmonads.TaskAnyCompletableFuture
+
+5. Monad 사용 예제를 통한 이해
 
 https://github.com/jooyunghan
 https://github.com/jasongoodwin/better-java-monads
