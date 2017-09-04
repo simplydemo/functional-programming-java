@@ -73,6 +73,14 @@ var arr = [1, 2, 3, 4, 5];
 evenFunc(arr);
 
 
+*** 너무나도 중요하고 흔들리지 말아야 할 사항으로 함수 f 는 인자 x 를 입력 하여 결과값 x` 를 반환 하며, 함수 f 는 pure 함수여야만 한다 라는 점이다.
+x` = f(x)
+
+어떤 값 xxx = a(x).b(x).c(x).d(x).e(x).f(x).g(x).h(x) 의 결과 일 수 있다.
+
+
+           
+
 
 살펴 보기 순서
 1. Function 에 대한 간단한 이해
@@ -85,17 +93,59 @@ evenFunc(arr);
   re.study.functionalprogramming.predicate.PredicateCollection
   re.study.functionalprogramming.predicate.PredicateExpireDate
 
-3. Supplier 에 대한 간단한 이해
+3. Consumer 에 대한 간단한 이해
+  re.study.functionalprogramming.consumer.ConsumerTest
+  
+4. Supplier 에 대한 간단한 이해
   re.study.functionalprogramming.supplier.SupplierTest
   re.study.functionalprogramming.supplier.SupplierLongTimeTest
   re.study.functionalprogramming.supplier.SupplierFactoryTest
 
-4. CompletableFuture 의 이해
+5. CompletableFuture 의 이해
   re.study.functionalprogramming.jmonads.CompletableFutureTest
   re.study.functionalprogramming.jmonads.TaskAllCompletableFuture
   re.study.functionalprogramming.jmonads.TaskAnyCompletableFuture
 
-5. Monad 사용 예제를 통한 이해
+6. Functor 에 대한 이해
+어떤 값을 캡슐화하는 타입 인자를 가지는 자료구조이다.
+~~~
+import java.util.function.Function;
+
+interface Functor<T> {
+    <R> Functor<R> map(Function<T,R> f);
+}
+
+/* 구현 샘플 */
+class Identity<T> 
+    implements Functor<T, Identity<?>> {
+
+    private final T value;
+
+    Identity(T value) { 
+        this.value = value; 
+    }
+
+    public T get() {
+    	return this.value;
+    }
+
+    public <R> Identity<R> map(Function<T,R> f) {
+        final R result = f.apply(value);
+        return new Identity<>(result);
+    }    
+    
+}
+
+/* 샘플 */
+
+Identity<String> val = new Identity<>("abc");
+Identity<Integer> len = val.map(String::length);
+~~~
+
+
+6. Monad 에 대한 이해
+
+
 
 https://github.com/jooyunghan
 https://github.com/jasongoodwin/better-java-monads

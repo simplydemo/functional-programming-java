@@ -3,8 +3,12 @@ package re.study.functionalprogramming.functor;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.junit.Test;
 
@@ -133,12 +137,52 @@ public class FunctorExample {
                 return of(f.apply(valueOrNull));
         }
 
+        /**
+         * @param f 함수
+         * @return 모나드
+         */
+        public <M> FOptional<M> flatMap(Function<T, FOptional<M>> f) {
+            return f.apply(valueOrNull);
+        }
+
+        /**
+         * 모나드를 이해 하기 위한 함수로, tryParse 는 문자열 str을 인자로 받아, FOptional<Integer> 펑터 객체를 반환 한다.
+         * 
+         * <pre>
+         * 이 함수를 map 에서 호출 하게 되면 어떻게 되는가?
+         * FOptional.of("1004").map(v -> Integer.parseInt(v)) 의 결과는
+         *     FOptional<Integer> 객체를 반환 할 것이다.
+         * 
+         * 그렇다면,
+         * FOptional.of("1004").map(FOptional::ofInt) 결과는 어떤 객체일 것인가?
+         * </pre>
+         */
+        static public FOptional<Integer> ofInt(String str) {
+            try {
+                final Integer i = Integer.parseInt(str);
+                return FOptional.of(i);
+            }
+            catch (NumberFormatException e) {
+                return empty();
+            }
+        }
+
+        static public FOptional<LocalDateTime> oflocalDtm(Long v) {
+            try {
+                final LocalDateTime localDtm = LocalDateTime.ofInstant(new Date(v).toInstant(), ZoneId.systemDefault());
+                return FOptional.of(localDtm);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                return empty();
+            }
+        }
+
         public static <T> FOptional<T> of(T a) {
             return new FOptional<T>(a);
         }
 
-        @SuppressWarnings("hiding")
-        private <T> FOptional<T> empty() {
+        static private <T> FOptional<T> empty() {
             return new FOptional<T>(null);
         }
 
@@ -150,7 +194,7 @@ public class FunctorExample {
      * @throws Exception
      */
     @Test
-    public void testCustomerFunctor2() throws Exception {
+    public void test_01FOptional() throws Exception {
         String addr = "hollywood";
         addr = null;
         Customer customer = new Customer(addr);
@@ -182,6 +226,43 @@ public class FunctorExample {
             log.error(e.getMessage());
         }
         // @formatter:on
+    }
+
+    @Test
+    public void test_02FOptional() throws Exception {
+        log.info("CASE 1  {}", FOptional.of("1004").getClass().getSimpleName());
+        log.info("CASE 1  {}", FOptional.of("1004").valueOrNull);
+        log.info("CASE 1  {}", FOptional.of("1004").valueOrNull.getClass().getSimpleName());
+
+        log.info("CASE 2  {}", FOptional.of("1004").map(Integer::valueOf).getClass().getSimpleName());
+        log.info("CASE 2  {}", FOptional.of("1004").map(Integer::valueOf).valueOrNull);
+        log.info("CASE 2  {}", FOptional.of("1004").map(Integer::valueOf).valueOrNull.getClass().getSimpleName());
+    }
+
+    /**
+     * String->Integer, String->Timestamp 와 같이 ofInt, ofTimestamp 와 같이 다양하게 구성 하면, 보다 쉽고
+     * 확장성 있는 프로그래밍이 가능 할 것 같다. 그래서, 문자를 숫자로 변환 하는 기능을 단순화 하여 사용하기 위해, ofInt 함수를 구현하고 아래와
+     * 같이 사용 한다고 하자.
+     */
+    @Test
+    public void test_03FOptional() throws Exception {
+        log.info("UseCase {}", FOptional.ofInt("1004").valueOrNull + 1);
+        log.info("CASE 1  {}", FOptional.of("1004").map(FOptional::ofInt).valueOrNull);
+        log.info("CASE 1  {}", FOptional.of("1004").map(FOptional::ofInt).valueOrNull.getClass().getSimpleName());
+
+        /**
+         * FOptional.of("1004").map(FOptional::ofInt).valueOrNull 의 결과는 당연하게도 숫자 값의 1004 가
+         * 될 수 없다. FOptional::ofInt 함수가 Integer 가 아닌, FOptional<Integer> 를 반환 하기 때문 이다.
+         * 
+         * 위 함수의 결과는 FOptional<FOptional<Integer>> 객체를 반환 한다.
+         */
+        log.info("CASE 2  {}", FOptional.of("1004").flatMap(FOptional::ofInt).valueOrNull);
+        log.info("CASE 2  {}", FOptional.of("1004").map(Long::valueOf).flatMap(FOptional::oflocalDtm).valueOrNull);
+
+        log.info("CASE 2  {}", FOptional.of("1004").flatMap(FOptional::ofInt).valueOrNull.getClass().getSimpleName());
+        log.info("CASE 2  {}", FOptional.of("1004").map(Long::valueOf).flatMap(FOptional::oflocalDtm).valueOrNull
+                .getClass().getSimpleName());
+
     }
 
     /**
