@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,19 +45,6 @@ public class CSVReader {
             }
             return map;
         }).collect(Collectors.toList());
-        return values;
-    }
-
-    // Function<? super T, ? extends Stream<? extends R>> mapper
-    static public <T> List<T> toListMap(final Path path, final Function<String, ? extends Stream<T>> mapper)
-            throws IOException {
-        // final String[] keys = Files.lines(path).findFirst().get().split(",");
-        // @formatter:off
-        List<T> values = Files.lines(path)
-                // .skip(1)
-                .flatMap(mapper)
-                .collect(Collectors.toList());
-        // @formatter:on 
         return values;
     }
 
