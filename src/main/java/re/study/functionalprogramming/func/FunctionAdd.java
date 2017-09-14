@@ -1,6 +1,5 @@
 package re.study.functionalprogramming.func;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -85,7 +84,7 @@ public class FunctionAdd {
     }
 
     /**
-     * 두개의 인자를 받는  Function 함수 x = f(i1).apply(i2)
+     * 두개의 인자를 받는 Function 함수 x = f(i1).apply(i2)
      */
     @Test
     public void ut1004_AddXY() {
@@ -103,6 +102,7 @@ public class FunctionAdd {
     public void ut1005_AddXYAndAddOne() {
         log.info("result: {}", addInt.andThen(v -> v + 5).apply(10, 10));
         log.info("result: {}", addInt.andThen(FunctionAdd::add5).apply(10, 10));
+        log.info("result: {}", addOne.andThen(FunctionAdd::add5).apply(1));
     }
 
     @Test
@@ -110,21 +110,17 @@ public class FunctionAdd {
         log.info("result: {}", addInt(10).andThen(addInt(5)).apply(10));
     }
 
-    /**
-     * 입력 아규먼트 값을 더한 값을 리턴
-     * 
-     * @param <T> 입력 아규먼트 타입
-     * @param <R> 리턴 아규먼트 타입
-     */
     @FunctionalInterface
-    static interface AddFunction<T, R> {
+    interface ConstantFunction<R> {
+        R apply();
+    }
 
-        R apply(T t);
+    ConstantFunction<Integer> one = () -> 1;
 
-        default <V> Function<T, V> and(Function<? super R, ? extends V> other) {
-            Objects.requireNonNull(other);
-            return (T t) -> other.apply(apply(t));
-        }
+    @Test
+    public void ut1007_ConstantFunction() {
+        System.out.println(one.apply());
+        log.info("result: {}", one.apply());
     }
 
     /**
@@ -134,6 +130,7 @@ public class FunctionAdd {
 
     @Test
     public void testAddFunc() {
+        System.out.println(addFunc.apply(100).apply(2));
         log.info("result: {}", addFunc.apply(100).apply(2));
     }
 
