@@ -44,27 +44,27 @@ public class FunctionCollectionAdd {
         R avg(T t, D d);
     }
 
-    AvgFunction<Integer, Integer, Integer> avg = (v, d) -> v / d;
-
-    /**
-     * 커스텀 AvgFunction를 통한, avgFunc 함수 테스트
-     */
-    @Test
-    public void test_avgFunc() {
-        log.info("result: {}", avg.avg(sum().apply(values), values.size()));
-    }
-
     /**
      * 두개의 인자를 취하는 함수는 이미 BiFunction 을 제공 하고 있음.
      */
-    BiFunction<Integer, Integer, Integer> avg2 = (v, d) -> v / d;
+    BiFunction<Integer, Integer, Integer> avg = (v, d) -> v / d;
 
     /**
      * BiFunction를 통한, avg 함수 테스트
      */
     @Test
     public void test_avg() {
-        log.info("result: {}", avg2.apply(sum().apply(values), values.size()));
+        log.info("result: {}", avg.apply(sum().apply(values), values.size()));
+    }
+
+    AvgFunction<Integer, Integer, Integer> avgFunc = (v, d) -> v / d;
+
+    /**
+     * 커스텀 AvgFunction를 통한, avgFunc 함수 테스트
+     */
+    @Test
+    public void test_avgFunc() {
+        log.info("result: {}", avgFunc.avg(sum().apply(values), values.size()));
     }
 
     public static Function<String, Function<Integer, String>> getNumbers() {
@@ -79,8 +79,8 @@ public class FunctionCollectionAdd {
     }
 
     /**
-     * Currying(커링): 커링은 여러 인자를 받는 함수를 하나의 인자만 받도록 여러함수를 합성 하는 기법 이다.
-     * Why? 인자를 여러개를 받는 함수는 사용성에 있어서 유연하지 않기 때문 이다.
+     * Currying(커링): 커링은 여러 인자를 받는 함수를 하나의 인자만 받도록 여러함수를 합성 하는 기법 이다. Why? 인자를 여러개를 받는 함수는
+     * 사용성에 있어서 유연하지 않기 때문 이다.
      * 
      * <code>
      * o = f(a, b) + c

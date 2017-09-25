@@ -1,4 +1,27 @@
 # functional-programming-java
+**`함수형 프로그래밍의 장점`**
+- 상태가 없다; Side effect가 없다.
+- 동시성 - 멀티코어 기술과 궁합이 잘 맞다.
+- 프로그램이 짧고 읽기 쉽다.
+- 생산성이 올라간다.
+
+
+**`함수형 프로그래밍의 단점`**
+- 상태가 없다; Side effect가 없다.
+현실의 프로그램은 모두 side effect와 mutation으로 동작한다. 사용자와의 interaction은 대부분 상태의 변화로 모델링 된다. 
+(총으로 외계인을 쐈는데 체력이 떨어진 새로운 외계인을 생성하는 것으로 모델링할 사람은 거의 없다. 
+대개는 기존 외계인의 체력을 감소시킨다.)
+- 동시성 - 멀티코어 기술과 궁합이 잘 맞다.
+Immutable data structure는 "쓰레드 안전"을 쉽게 확보하는 대신 '오래된' 데이터를 사용하게 될 수도 있다.
+Mutable data structure는 항상 최신 데이터를 다룬다는 장점이 있지만 Data Consistency를 보장하기 위한 복잡함을 수반한다. 
+어느 것이 낫다고 할 수는 없다.
+- 프로그램이 짧고 읽기 쉽다. 
+더 길고 읽기 어려운 경우도 있다. 
+- 생산성이 올라간다.
+함수형 스타일로 프로그램을 작성할 수 있는 프로그래머를 채용하는데 드는 비용을 상쇄시킬만큼 생산성이 올라야만 한다.
+
+`세상엔 함수형 스타일이 딱 맞아떨어지지 않는 문제도 많다`
+
 ## 함수형 프로그래밍의 핵심
 ### 1. 순수 함수로 작성 되어야 한다. 수학의 f(x) 와 동일 하다.  
   (* 함수는 side-effect 를 가지지 않는다.)
@@ -207,8 +230,13 @@ System.out.println( sum().apply(values) );
     System.out.println( avg.apply(sum().apply(values), values.size()) );
 ~~~
 
-- 커링을 통한 평균 값을 구하는 함수 curriedAvg
-
+- 커링을 통한 평균 값을 구하는 함수 avgCurry
+~~~
+    Function<Collection<Integer>, Function<Integer, Double>> avgCurry = list -> count -> {
+        final double sum = list.stream().reduce(0, (a, b) -> a + b);
+        return new Double(sum / count);
+    };
+~~~
 
   re.study.functionalprogramming.func.FunctionCollectionAdd
   re.study.functionalprogramming.func.CalculatorBiFunction
